@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>STAN — Une expérience immersive · Eminem ft. Dido</title>
+<meta name="description" content="Une expérience interactive autour de « Stan », le clip légendaire d'Eminem ft. Dido (2000). Histoire, références, chapitres synchronisés — le clip officiel en fond d'écran.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Special+Elite&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=3">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' font-family='monospace'>📼</text></svg>">
+</head>
+<body>
+
+<!-- ══════════════ RAIN CANVAS (global) ══════════════ -->
+<canvas id="rain" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<!-- ══════════════ COMPTEUR DE VISITES (discret, local) ══════════════ -->
+<div class="visitor" id="visitor" title="Compteur de visites — sauvegardé sur cet appareil">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+  <span id="visitorCount">···</span>
+</div>
+
+<!-- ══════════════ CURSEUR PERSONNALISÉ ══════════════ -->
+<div class="cursor-dot" aria-hidden="true"></div>
+<div class="cursor-ring" aria-hidden="true"></div>
+
+<!-- ══════════════ GATE / INTRO ══════════════ -->
+<div id="gate" class="gate" role="dialog" aria-modal="true" aria-label="Écran d'entrée de l'expérience">
+  <div class="gate__rain-flash" aria-hidden="true"></div>
+  <div class="gate__inner">
+    <p class="gate__kicker">Eminem&nbsp;&nbsp;·&nbsp;&nbsp;The Marshall Mathers LP&nbsp;&nbsp;·&nbsp;&nbsp;2000</p>
+    <h1 class="gate__title glitch" data-text="STAN">STAN</h1>
+    <p class="gate__sub">Une expérience immersive. Le clip officiel, l'histoire vraie qui a fait trembler la pop-culture, et le mot qui est entré dans le dictionnaire.</p>
+    <div class="gate__warning" role="note">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M12 9v4m0 4h.01M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0Z"/></svg>
+      <span>Son conseillé · durée 8:09 · flashs lumineux</span>
+    </div>
+    <div class="gate__actions">
+      <button id="enterSound" class="btn btn--primary" type="button">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+        Entrer avec le son
+      </button>
+      <button id="enterMuted" class="btn btn--ghost" type="button">Entrer sans le son</button>
+    </div>
+    <p class="gate__legal">Clip officiel « Stan (Long Version) ft. Dido » © Eminem / Aftermath / Interscope — lu depuis YouTube.</p>
+  </div>
+  <div class="gate__tape" aria-hidden="true">
+    <div class="tape">
+      <span class="tape__label">MMLP · SIDE A · STAN</span>
+      <div class="tape__reels"><span class="reel"></span><span class="reel"></span></div>
+      <div class="tape__window"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ VIDEO BACKGROUND ══════════════ -->
+<div class="video-stage" aria-hidden="true">
+  <div class="video-stage__frame" id="ytWrap"><div id="yt-bg"></div></div>
+  <div class="video-stage__scrim"></div>
+</div>
+
+<!-- ══════════════ SYNCED CAPTION BAR ══════════════ -->
+<div id="caption" class="caption" aria-live="polite">
+  <span class="caption__chapter" id="captionChapter">OUVERTURE</span>
+  <span class="caption__text" id="captionText">« My tea's gone cold… »</span>
+</div>
+
+<main id="content" class="content" aria-hidden="true">
+
+  <!-- ══════════════ HERO ══════════════ -->
+  <section class="hero" id="hero">
+    <div class="hero__stack" aria-hidden="true">
+      <span class="hero__ghost">STAN</span>
+      <span class="hero__ghost hero__ghost--2">STAN</span>
+    </div>
+    <div class="hero__inner">
+      <p class="hero__kicker reveal">Eminem&nbsp;ft.&nbsp;Dido — <em>Stan</em>, 2000</p>
+      <h1 class="hero__title glitch" data-text="STAN" aria-label="Stan">STAN</h1>
+      <p class="hero__lede reveal">L'histoire d'un fan qui écrivait trop vite,<br>et d'un rappeur qui répondit trop tard.</p>
+      <div class="hero__scroll" aria-hidden="true">
+        <span>DÉROULER L'HISTOIRE</span>
+        <i></i>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ CHAPITRES / HISTOIRE ══════════════ -->
+  <section class="story" id="story">
+    <header class="section-head">
+      <p class="section-head__kicker reveal">Le clip en quatre mouvements</p>
+      <h2 class="section-head__title reveal">L'HISTOIRE<span class="accent">.</span></h2>
+      <p class="section-head__lede reveal">Quatre lettres, une pluie constante, et une fin que personne n'a vue venir. Cliquez sur un chapitre pour envoyer le clip à ce moment précis.</p>
+    </header>
+
+    <div class="timeline" id="timeline">
+      <div class="timeline__rail" aria-hidden="true"><span id="railProgress"></span></div>
+
+      <article class="chapter" data-time="0" data-chapter="OUVERTURE">
+        <div class="chapter__stamp reveal">00:00 — ≈ 0:40</div>
+        <div class="chapter__paper paper reveal">
+          <p class="paper__meta">Detroit, Michigan — nuit de pluie</p>
+          <h3 class="paper__title">OUVERTURE<span class="accent">.</span></h3>
+          <p class="paper__body type">Une chambre sombre. Un fan assis devant sa télé. Le refrain de Dido tourne en boucle — <strong>« my tea's gone cold »</strong> — pendant que Stan met en marche son magnétophone. Il a quelque chose à dire à son idole.</p>
+          <button class="chapter__seek btn btn--small" type="button" data-seek="0">▸ Envoyer le clip ici</button>
+        </div>
+      </article>
+
+      <article class="chapter chapter--right" data-time="42" data-chapter="LETTRE N°1">
+        <div class="chapter__stamp reveal">≈ 0:42</div>
+        <div class="chapter__paper paper reveal">
+          <p class="paper__meta">Lettre 1 / 3 — « Dear Slim »</p>
+          <h3 class="paper__title">LETTRE N°1<span class="accent">.</span></h3>
+          <p class="paper__body type">Stan se présente : le plus grand fan du monde, celui qui a tout son tatouage, qui connaît chaque vers par cœur. Il raconte sa vie, sa copine enceinte, son petit frère qui admire Slim autant que lui. Il attend juste une réponse.</p>
+          <button class="chapter__seek btn btn--small" type="button" data-seek="42">▸ Envoyer le clip ici</button>
+        </div>
+      </article>
+
+      <article class="chapter" data-time="188" data-chapter="LETTRE N°2">
+        <div class="chapter__stamp reveal">≈ 3:08</div>
+        <div class="chapter__paper paper reveal">
+          <p class="paper__meta">Lettre 2 / 3 — l'obsession s'installe</p>
+          <h3 class="paper__title">LETTRE N°2<span class="accent">.</span></h3>
+          <p class="paper__body type">Toujours aucune réponse. Stan écrit plus vite, plus fort, plus sombre. Il enregistre sa lettre sur cassette, la voix cassée par la colère. Sa copine détruit son studio. Dehors, il pleut encore. Il monte dans sa voiture — avec son frère à l'arrière.</p>
+          <button class="chapter__seek btn btn--small" type="button" data-seek="188">▸ Envoyer le clip ici</button>
+        </div>
+      </article>
+
+      <article class="chapter chapter--right" data-time="318" data-chapter="LE DERNIER TRAJET">
+        <div class="chapter__stamp reveal">≈ 5:18</div>
+        <div class="chapter__paper paper reveal">
+          <p class="paper__meta">Le dernier enregistrement</p>
+          <h3 class="paper__title">LE DERNIER TRAJET<span class="accent">.</span></h3>
+          <p class="paper__body type">Voix étouffée, pluie sur le pare-brise. Stan dit au revoir, promet qu'on se verra de l'autre côté — et tourne le volant. La cassette continue de tourner. C'est l'image la plus glaçante du clip : un magnétophone qui roule encore.</p>
+          <button class="chapter__seek btn btn--small" type="button" data-seek="318">▸ Envoyer le clip ici</button>
+        </div>
+      </article>
+
+      <article class="chapter" data-time="420" data-chapter="ÉPILOGUE">
+        <div class="chapter__stamp reveal">≈ 7:00</div>
+        <div class="chapter__paper paper paper--reply reveal">
+          <p class="paper__meta">Épilogue — Slim répond</p>
+          <h3 class="paper__title">ÉPILOGUE<span class="accent">.</span></h3>
+          <p class="paper__body type">Dans un bus de tournée, Eminem ouvre enfin son courrier. Il commence à répondre, gentiment, un peu honteux d'avoir mis si longtemps. Puis il lit l'article de journal. Le silence. La caméra de fin : le petit frère de Stan, devant la télé.</p>
+          <button class="chapter__seek btn btn--small" type="button" data-seek="420">▸ Envoyer le clip ici</button>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ══════════════ PERSONNAGES ══════════════ -->
+  <section class="cast" id="cast">
+    <header class="section-head">
+      <p class="section-head__kicker reveal">Casting du clip</p>
+      <h2 class="section-head__title reveal">LES FIGURES<span class="accent">.</span></h2>
+    </header>
+    <div class="cast__grid">
+      <article class="flip reveal" tabindex="0">
+        <div class="flip__inner">
+          <div class="flip__face flip__face--front">
+            <span class="flip__num">01</span>
+            <h3>STAN</h3>
+            <p>Le fan parfait devenu fan fatal.</p>
+            <span class="flip__hint">Retourner la carte ↻</span>
+          </div>
+          <div class="flip__face flip__face--back">
+            <h3>DEVON SAWA</h3>
+            <p>L'acteur de <em>Final Destination</em> prête son visage au fan le plus célèbre du rap. Il n'a presque aucun dialogue — tout passe par ses lettres et ses yeux.</p>
+          </div>
+        </div>
+      </article>
+      <article class="flip reveal" tabindex="0">
+        <div class="flip__inner">
+          <div class="flip__face flip__face--front">
+            <span class="flip__num">02</span>
+            <h3>SLIM</h3>
+            <p>L'idole débordée qui répondra trop tard.</p>
+            <span class="flip__hint">Retourner la carte ↻</span>
+          </div>
+          <div class="flip__face flip__face--back">
+            <h3>EMINEM</h3>
+            <p>Il co-réalise le clip avec Dr. Dre et Philip Atwell. Son épilogue — répondu depuis un bus de tournée — transforme une chanson en tragédie grecque.</p>
+          </div>
+        </div>
+      </article>
+      <article class="flip reveal" tabindex="0">
+        <div class="flip__inner">
+          <div class="flip__face flip__face--front">
+            <span class="flip__num">03</span>
+            <h3>DIDO</h3>
+            <p>La voix fantôme qui porte tout le poids.</p>
+            <span class="flip__hint">Retourner la carte ↻</span>
+          </div>
+          <div class="flip__face flip__face--back">
+            <h3>LA VOIX DU REFRAIN</h3>
+            <p>Le beat est bâti sur son titre <em>Thank You</em> (1998). Elle joue aussi la copine de Stan dans le clip — et son refrain devient la boucle mentale de toute l'histoire.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ══════════════ STATS / TIMELINE ══════════════ -->
+  <section class="impact" id="impact">
+    <header class="section-head">
+      <p class="section-head__kicker reveal">De la cassette au dictionnaire</p>
+      <h2 class="section-head__title reveal">L'ONDE DE CHOC<span class="accent">.</span></h2>
+    </header>
+
+    <div class="stats reveal">
+      <div class="stat"><span class="stat__num" data-count="1">0</span><span class="stat__label">N°1 au Royaume-Uni &amp; en Australie</span></div>
+      <div class="stat"><span class="stat__num" data-count="878" data-suffix="M+">0</span><span class="stat__label">Vues du clip officiel</span></div>
+      <div class="stat"><span class="stat__num" data-count="6" data-suffix=":44">0</span><span class="stat__label">Durée de la version album</span></div>
+      <div class="stat"><span class="stat__num" data-count="2017">0</span><span class="stat__label">Entrée dans l'Oxford English Dictionary</span></div>
+    </div>
+
+    <ol class="mtimeline">
+      <li class="mtimeline__item reveal"><span class="mtimeline__year">1998</span><p>Dido publie <em>Thank You</em>. Un producteur new-yorkais, The 45 King, en extrait une boucle et l'envoie à Detroit.</p></li>
+      <li class="mtimeline__item reveal"><span class="mtimeline__year">Mai 2000</span><p><em>The Marshall Mathers LP</em> sort. <em>Stan</em>, piste 4, devient en silence le cœur sombre de l'album.</p></li>
+      <li class="mtimeline__item reveal"><span class="mtimeline__year">Déc 2000</span><p>Le single sort et le clip, co-réalisé par Dr. Dre, inonde MTV. Stan n°1 au Royaume-Uni, en Australie, en Allemagne.</p></li>
+      <li class="mtimeline__item reveal"><span class="mtimeline__year">Fév 2001</span><p>Aux Grammy, Eminem monte sur scène avec… Elton John pour un duo choc sur <em>Stan</em>. L'image fait le tour du monde.</p></li>
+      <li class="mtimeline__item reveal"><span class="mtimeline__year">2017</span><p>« Stan » entre officiellement dans l'Oxford English Dictionary : « fan excessivement zélé ou obsessionnel ».</p></li>
+      <li class="mtimeline__item reveal"><span class="mtimeline__year">Aujourd'hui</span><p>Le mot est partout — fandoms, réseaux, presse. Un prénom de fan est devenu un verbe universel.</p></li>
+    </ol>
+  </section>
+
+  <!-- ══════════════ RÉFÉRENCES / EASTER EGGS ══════════════ -->
+  <section class="refs" id="refs">
+    <header class="section-head">
+      <p class="section-head__kicker reveal">Pour ceux qui connaissent par cœur</p>
+      <h2 class="section-head__title reveal">LES RÉFÉRENCES<span class="accent">.</span></h2>
+      <p class="section-head__lede reveal">Survolez les cartes — chaque détail du clip cache une histoire.</p>
+    </header>
+    <div class="refs__grid">
+      <article class="ref reveal"><span class="ref__tag">SAMPLE</span><h3>« My tea's gone cold »</h3><p>Ce n'est pas Dido qui a chanté sur <em>Stan</em> : c'est <em>Stan</em> qui a été construit autour d'elle. Le beat de The 45 King échantillonne <em>Thank You</em> et la chanson de 1998 devient la bande-son d'une obsession.</p></article>
+      <article class="ref reveal"><span class="ref__tag">OBJET</span><h3>La cassette</h3><p>Le clip est un film en Found Footage avant l'heure : lettres, photos, enregistrements. La cassette du dernier trajet est devenue l'un des objets les plus iconiques du rap.</p></article>
+      <article class="ref reveal"><span class="ref__tag">ÉPILOGUE</span><h3>Matthew</h3><p>À la fin, c'est le petit frère de Stan qui apparaît — blond, t-shirt blanc, comme son grand frère au début. La boucle est fermée. Beaucoup y voient la suite de l'histoire dans <em>The Eminem Show</em> (2002), la chanson « Sing for the Moment » répondant en creux au dilemme de l'influence.</p></article>
+      <article class="ref reveal"><span class="ref__tag">GRAMMY 2001</span><h3>Le duo avec Elton John</h3><p>Accusé d'homophobie, Eminem répond en ouvrant les Grammy 2001 en duo avec Elton John sur <em>Stan</em>. Provocation, pardon ou coup de génie ? Vingt ans plus tard, on en parle encore.</p></article>
+      <article class="ref reveal"><span class="ref__tag">RÉALISATION</span><h3>Dr. Dre aux commandes</h3><p>Co-réalisé par Dr. Dre et Philip Atwell, le clip durera plus de 8 minutes — une exception sur MTV. Il remportera plusieurs prix et restera dans tous les classements des meilleurs clips de l'histoire.</p></article>
+      <article class="ref reveal"><span class="ref__tag">LANGUE</span><h3>« Stan » est un mot</h3><p>2017 : l'Oxford English Dictionary officialise le terme. Merriam-Webster suit. Des dictionnaires aux noms de fandoms, le prénom de Stan est devenu le mot le plus utilisé de la culture fan.</p></article>
+      <article class="ref reveal"><span class="ref__tag">PLUIE</span><h3>Il pleut tout le temps</h3><p>Regardez bien : sur chaque scène de Stan, il pleut — ou il fait nuit. Slim, lui, vit dans la lumière des projecteurs. Deux mondes, deux météos, et un pont entre les deux.</p></article>
+      <article class="ref reveal"><span class="ref__tag"> Version longue</span><h3>8:09 de film</h3><p>La version longue du clip ajoute l'épilogue complet. C'est elle qui est diffusée ici — le « film » tel qu'Eminem et Dre l'ont imaginé, et non la version radio.</p></article>
+    </div>
+  </section>
+
+  <!-- ══════════════ PAROLES / SOURCES ══════════════ -->
+  <section class="lyrics-cta" id="lyrics">
+    <div class="lyrics-cta__box reveal">
+      <p class="section-head__kicker">Les paroles complètes</p>
+      <h2 class="section-head__title">TOUT LIRE, PARTOUT<span class="accent">.</span></h2>
+      <p class="lyrics-cta__p">Par respect des droits d'auteur, cette expérience ne reproduit pas les paroles intégrales. Retrouvez-les sur les sources officielles, ou laissez la voix d'Eminem vous les raconter — c'est le principe du clip ci-dessus.</p>
+      <div class="gate__actions">
+        <a class="btn btn--primary" href="https://genius.com/Eminem-stan-lyrics" target="_blank" rel="noopener noreferrer">Paroles officielles · Genius ↗</a>
+        <a class="btn btn--ghost" href="https://www.youtube.com/watch?v=gOMhN-hfMtY" target="_blank" rel="noopener noreferrer">Le clip sur YouTube ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <footer class="footer">
+    <p class="footer__big" aria-hidden="true">DEAR&nbsp;SLIM</p>
+    <div class="footer__cols">
+      <div>
+        <h4>STAN — EXPERIENCE</h4>
+        <p>Un hommage interactif, construit avec les skills UI/UX Pro Max. Aucun contenu audio/vidéo n'est hébergé ici : le clip officiel est lu via l'embed YouTube.</p>
+      </div>
+      <div>
+        <h4>CRÉDITS</h4>
+        <p>Musique &amp; clip © Eminem, Aftermath, Interscope · Réalisation : Dr. Dre &amp; Philip Atwell · Sample : Dido — <em>Thank You</em> (1998)</p>
+      </div>
+      <div>
+        <h4>SOURCES</h4>
+        <p><a href="https://www.eminem.com" target="_blank" rel="noopener noreferrer">eminem.com</a> · <a href="https://genius.com/Eminem-stan-lyrics" target="_blank" rel="noopener noreferrer">Genius</a> · <a href="https://www.oed.com" target="_blank" rel="noopener noreferrer">OED</a> · <a href="https://www.youtube.com/watch?v=gOMhN-hfMtY" target="_blank" rel="noopener noreferrer">Clip officiel</a></p>
+      </div>
+    </div>
+    <p class="footer__legal">Ce site est un projet créatif non commercial. « Stan », « Eminem » et les œuvres citées appartiennent à leurs ayants droit.</p>
+  </footer>
+</main>
+
+<!-- ══════════════ PLAYER DOCK ══════════════ -->
+<div class="dock" id="dock" hidden>
+  <button class="dock__btn" id="dockPlay" type="button" aria-label="Lecture / pause">
+    <svg id="iconPlay" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>
+    <svg id="iconPause" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>
+  </button>
+  <span class="dock__time" id="dockTime">0:00 / 8:09</span>
+  <div class="dock__bar" id="dockBar" role="slider" aria-label="Position dans le clip" aria-valuemin="0" aria-valuemax="489" aria-valuenow="0" tabindex="0">
+    <span class="dock__fill" id="dockFill"></span>
+    <span class="dock__knob" id="dockKnob"></span>
+  </div>
+  <button class="dock__btn" id="dockMute" type="button" aria-label="Couper le son">
+    <svg id="iconVol" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 10v4h4l5 5V5L7 10H3zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4z"/></svg>
+    <svg id="iconMuted" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="display:none"><path d="M16.5 12A4.5 4.5 0 0 0 14 8v2.18l2.45 2.45c.03-.2.05-.41.05-.63zM19 12c0 .94-.2 1.82-.54 2.64l1.51 1.51A8.8 8.8 0 0 0 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3 3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06a8.99 8.99 0 0 0 3.69-1.81L19.73 21 21 19.73 4.27 3z"/></svg>
+  </button>
+  <a class="dock__yt" href="https://www.youtube.com/watch?v=gOMhN-hfMtY" target="_blank" rel="noopener noreferrer" aria-label="Voir sur YouTube">YT↗</a>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://www.youtube.com/iframe_api" async></script>
+<script src="js/app.js"></script>
+</body>
+</html>
